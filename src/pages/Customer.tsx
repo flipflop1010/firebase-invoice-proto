@@ -3,7 +3,7 @@ import React from 'react'
 import { Container, Grid, Button, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, Stack } from '@mui/material'
 import { NavLink } from 'react-router-dom'
 import DeleteIcon from '@mui/icons-material/Delete';
-import { doc, getDocs, collection } from 'firebase/firestore';
+import { doc, getDocs, collection, deleteDoc } from 'firebase/firestore';
 import { firebaseDB } from '../app/config/firebaseConfig/firebaseConfig';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { red } from '@mui/material/colors';
@@ -27,7 +27,7 @@ const Customer = () => {
         })
         setCustomers(temp_arr)
         // return ["hello"];
-        
+
     }
 
     //@ fetch all customer data from firebase
@@ -42,7 +42,19 @@ const Customer = () => {
 
     }, [])
 
+    // @ delete customer handle
+    const handleCustomerDelete = (id:any) => {
+        console.log('delete id',id); 
+        if(!window.confirm('are u sure?')){
+            return ;
+        }
 
+        deleteDoc(doc(firebaseDB,'customers',id));
+        getCustomers();
+
+    }
+
+   
 
 
 
@@ -96,17 +108,17 @@ const Customer = () => {
                                             <TableCell component="th" scope="row">
                                                 <Stack direction="row" spacing={1}>
 
-                                                <IconButton color='primary'  aria-label="view" component={NavLink} to={`customer-view/${customer.id}`}>
-                                                    <VisibilityIcon />
-                                                </IconButton>
+                                                    <IconButton color='primary' aria-label="view" component={NavLink} to={`customer-view/${customer.id}`}>
+                                                        <VisibilityIcon />
+                                                    </IconButton>
 
-                                                <IconButton color='success' aria-label="edit" component={NavLink} to={`customer-edit/${customer.id}`}>
-                                                    <EditOutlinedIcon />
-                                                </IconButton>
+                                                    <IconButton color='success' aria-label="edit" component={NavLink} to={`customer-edit/${customer.id}`}>
+                                                        <EditOutlinedIcon />
+                                                    </IconButton>
 
-                                                <IconButton sx={{ color:red[900] }} aria-label="delete" component={NavLink} to={`customer-delete/${customer.id}`}>
-                                                    <DeleteIcon />
-                                                </IconButton>
+                                                    <Button sx={{ color: red[900] }} aria-label="delete" onClick={() => { handleCustomerDelete(customer.id) }}>
+                                                        <DeleteIcon />
+                                                    </Button>
                                                 </Stack>
                                             </TableCell>
                                         </TableRow>

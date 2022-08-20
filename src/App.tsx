@@ -9,6 +9,8 @@ import Product from './pages/Product';
 import AddProduct from './pages/AddProduct';
 import CustomerView from './pages/CustomerView';
 import CustomerEdit from './pages/CustomerEdit';
+import ProductView from './pages/ProductView';
+import ProductEdit from './pages/ProductEdit';
 
 
 
@@ -24,7 +26,9 @@ function App() {
           <Route path="/customer-edit/:id" element={<CustomerEdit />} />
           <Route path="/customer-delete/:id" element={<CustomerView />} />
           <Route path="/product" element={<Product />} />
+          <Route path="/product-view/:id" element={<ProductView />} />
           <Route path="/product-add" element={<AddProduct />} />
+          <Route path="/product-edit/:id" element={<ProductEdit />} />
           <Route path="/invoice" element={<Invoice />} />
         </Routes>
 

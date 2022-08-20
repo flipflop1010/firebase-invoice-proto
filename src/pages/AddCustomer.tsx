@@ -51,7 +51,7 @@ const AddCustomer = () => {
                 sx={{ mt: 5, mb: 3, backgroundColor: "white" }}
                 maxWidth="md"
             >
-                <ProgressBarCircle show={showToastr}/>
+                {/* <ProgressBarCircle show={showToastr}/> */}
                 <SuccessToastr message='New Customer Added Successfully' show={showToastr} />
 
                

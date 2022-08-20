@@ -2,13 +2,75 @@ import React from 'react'
 import { Container, Grid, Button, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton } from '@mui/material'
 import { NavLink } from 'react-router-dom'
 import DeleteIcon from '@mui/icons-material/Delete';
+import ProductModel from '../app/data-models/ProductModel';
+import productService from '../app/services/ProductService';
+
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import { red } from '@mui/material/colors';
+import ProgressBarCircle from '../components/shared/porgress-bar/ProgressBarCircle';
+
 const Product = () => {
+
+    const [showProgressBar, setShowProgressBar] = React.useState<boolean>(false)
+    const [products, setProducts] = React.useState<ProductModel[]>()
+
+    const getProducts = async () => {
+        setShowProgressBar(true);
+        const res = await productService.fetchAll();
+        console.log(res);
+        if (res.success)
+            setShowProgressBar(false);
+        setProducts(res.data)
+    }
+
+
+    React.useEffect(() => {
+        getProducts()
+    }, [])
+
+
+
+    // @ delete customer handle
+    const handleProductDelete = async (id: any) => {
+        console.log('delete id', id);
+        if (!window.confirm('are u sure?')) {
+            return;
+        }
+        setShowProgressBar(true);
+
+        const res = await productService.delete(id);
+        // console.log(res);
+        if (res.success) {
+
+            setShowProgressBar(false);
+
+            getProducts();
+        }
+
+
+    }
+
+    // React.useEffect(()=>{
+    //     if(showProgressBar){
+    //         setShowProgressBar(false)
+    //     }
+    // },[showProgressBar])
+
+
+
+
+
     return (
         <div>
+
+
             <Container
                 sx={{ mt: 5, mb: 3, backgroundColor: "white" }}
                 maxWidth="md"
             >
+                {showProgressBar && (<ProgressBarCircle show={showProgressBar} />)}
+
                 <Grid container spacing={5}>
                     <Grid item md={12} xs={12} sm={12} >
                         <h2>
@@ -37,25 +99,40 @@ const Product = () => {
                                 </TableHead>
                                 <TableBody>
 
-                                    <TableRow>
-                                        <TableCell component="th" scope="row">
-                                            1
-                                        </TableCell>
-                                        <TableCell component="th" scope="row">
-                                            00021
-                                        </TableCell>
-                                        <TableCell component="th" scope="row">
-                                            Test 1
-                                        </TableCell>
-                                        <TableCell component="th" scope="row">
-                                            150.00
-                                        </TableCell>
-                                        <TableCell component="th" scope="row">
-                                            <IconButton aria-label="delete">
-                                                <DeleteIcon />
-                                            </IconButton>
-                                        </TableCell>
-                                    </TableRow>
+                                    {products?.length && products.map((product, index) => (
+
+
+
+                                        <TableRow key={index}>
+                                            <TableCell component="th" scope="row">
+                                                {index + 1}
+                                            </TableCell>
+                                            <TableCell component="th" scope="row">
+                                                {product.product_code}
+                                            </TableCell>
+                                            <TableCell component="th" scope="row">
+                                                {product.product_name}
+                                            </TableCell>
+                                            <TableCell component="th" scope="row">
+                                                {product.product_price}
+                                            </TableCell>
+                                            <TableCell component="th" scope="row">
+                                                <IconButton color='primary' aria-label="view" component={NavLink} to={`/product-view/${product.id}`}>
+                                                    <VisibilityIcon />
+                                                </IconButton>
+
+                                                <IconButton color='success' aria-label="edit" component={NavLink} to={`/product-edit/${product.id}`}>
+                                                    <EditOutlinedIcon />
+                                                </IconButton>
+
+                                                <Button sx={{ color: red[900] }} aria-label="delete" onClick={() => { handleProductDelete(product.id) }}>
+                                                    <DeleteIcon />
+                                                </Button>
+                                            </TableCell>
+                                        </TableRow>
+
+                                    ))}
+
 
 
 
