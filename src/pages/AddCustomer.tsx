@@ -34,7 +34,7 @@ const AddCustomer = () => {
         console.log("Document written with ID: ", newCustomerRef.id);
 
         if(newCustomerRef.id){
-            setShowProgressBar(false)
+            // setShowProgressBar(false)
             reset()
             setShowToastr(true)
         }

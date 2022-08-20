@@ -1,9 +1,51 @@
 
 import React from 'react'
-import { Container, Grid, Button, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton } from '@mui/material'
+import { Container, Grid, Button, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, Stack } from '@mui/material'
 import { NavLink } from 'react-router-dom'
 import DeleteIcon from '@mui/icons-material/Delete';
+import { doc, getDocs, collection } from 'firebase/firestore';
+import { firebaseDB } from '../app/config/firebaseConfig/firebaseConfig';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { red } from '@mui/material/colors';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 const Customer = () => {
+
+    const [customers, setCustomers] = React.useState<any>()
+
+
+    const getCustomers = async () => {
+        // const docRef = doc(firebaseDB, "customers");
+        const docSnap = await getDocs(collection(firebaseDB, "customers"))
+        //    console.log(typeof docSnap);
+        let temp_arr: any[] = [];
+        docSnap.forEach((doc) => {
+            // console.log(doc.id);
+            let data: any = doc.data()
+            data['id'] = doc.id;
+            temp_arr.push(data)
+
+        })
+        setCustomers(temp_arr)
+        // return ["hello"];
+        
+    }
+
+    //@ fetch all customer data from firebase
+
+    React.useEffect(() => {
+        try {
+            getCustomers();
+        } catch (error) {
+
+        }
+
+
+    }, [])
+
+
+
+
+
     return (
         <div>
             <Container
@@ -37,26 +79,38 @@ const Customer = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
+                                    {customers && customers.length && customers.map((customer: any, index: number) => (
+                                        <TableRow key={index}>
+                                            <TableCell component="th" scope="row">
+                                                {index + 1}
+                                            </TableCell>
+                                            <TableCell component="th" scope="row">
+                                                {customer.customer_name}
+                                            </TableCell>
+                                            <TableCell component="th" scope="row">
+                                                {customer.customer_address}
+                                            </TableCell>
+                                            <TableCell component="th" scope="row">
+                                                {customer.customer_contact}
+                                            </TableCell>
+                                            <TableCell component="th" scope="row">
+                                                <Stack direction="row" spacing={1}>
 
-                                    <TableRow>
-                                        <TableCell component="th" scope="row">
-                                            1
-                                        </TableCell>
-                                        <TableCell component="th" scope="row">
-                                            Test Customer
-                                        </TableCell>
-                                        <TableCell component="th" scope="row">
-                                            Amta Joypur
-                                        </TableCell>
-                                        <TableCell component="th" scope="row">
-                                            7845457845
-                                        </TableCell>
-                                        <TableCell component="th" scope="row">
-                                            <IconButton aria-label="delete">
-                                                <DeleteIcon />
-                                            </IconButton>
-                                        </TableCell>
-                                    </TableRow>
+                                                <IconButton color='primary'  aria-label="view" component={NavLink} to={`customer-view/${customer.id}`}>
+                                                    <VisibilityIcon />
+                                                </IconButton>
+
+                                                <IconButton color='success' aria-label="edit" component={NavLink} to={`customer-edit/${customer.id}`}>
+                                                    <EditOutlinedIcon />
+                                                </IconButton>
+
+                                                <IconButton sx={{ color:red[900] }} aria-label="delete" component={NavLink} to={`customer-delete/${customer.id}`}>
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                                </Stack>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
 
 
                                 </TableBody>
