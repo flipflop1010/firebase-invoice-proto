@@ -6,10 +6,10 @@ import { customerRef, firebaseDB } from '../app/config/firebaseConfig/firebaseCo
 import SuccessToastr from '../components/shared/toastr/SuccessToastr';
 import ProgressBarCircle from '../components/shared/porgress-bar/ProgressBarCircle';
 
-
+import { useNavigate, useParams } from 'react-router-dom';
 
 const AddCustomer = () => {
-
+    const navigate = useNavigate();
     // @states
     // @toastr state
     const [showToastr, setShowToastr] = React.useState<boolean>(false)
@@ -33,10 +33,11 @@ const AddCustomer = () => {
 
         console.log("Document written with ID: ", newCustomerRef.id);
 
-        if(newCustomerRef.id){
+        if (newCustomerRef.id) {
             // setShowProgressBar(false)
-            reset()
-            setShowToastr(true)
+            reset();
+            setShowToastr(true);
+            navigate('/');
         }
 
     }
@@ -54,7 +55,7 @@ const AddCustomer = () => {
                 {/* <ProgressBarCircle show={showToastr}/> */}
                 <SuccessToastr message='New Customer Added Successfully' show={showToastr} />
 
-               
+
 
                 <Grid container spacing={5}>
                     <Grid item md={12} xs={12} sm={12} >

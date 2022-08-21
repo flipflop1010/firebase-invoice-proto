@@ -4,8 +4,9 @@ import { useForm } from 'react-hook-form';
 import ProductModel from '../app/data-models/ProductModel';
 import productService from '../app/services/ProductService';
 import ProgressBarCircle from '../components/shared/porgress-bar/ProgressBarCircle';
+import { useNavigate, useParams } from 'react-router-dom';
 const AddProduct = () => {
-
+  const navigate = useNavigate();
   const [showProgressBar, setShowProgressBar] = React.useState<boolean>(false)
 
   const { register, handleSubmit, watch, formState: { errors }, reset } = useForm<ProductModel>();
@@ -18,11 +19,12 @@ const AddProduct = () => {
     console.log(data);
     setShowProgressBar(true);
     const res = await productService.add(data);
-    
+
     setShowProgressBar(false);
 
     reset()
     console.log(res);
+    navigate('/product');
 
 
   }

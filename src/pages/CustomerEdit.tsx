@@ -22,7 +22,7 @@ const CustomerEdit = () => {
 
 
     const params = useParams();
-    let navigate = useNavigate();
+    const navigate = useNavigate();
 
     const [customer, setCustomer] = React.useState<CustomerData>()
 
@@ -40,8 +40,8 @@ const CustomerEdit = () => {
     }
 
 
-    const updateCustomer=async (data:CustomerData)=>{
-       return await setDoc(doc(firebaseDB,'customers',`${params.id}`),data)
+    const updateCustomer = async (data: CustomerData) => {
+        return await setDoc(doc(firebaseDB, 'customers', `${params.id}`), data)
 
 
     }
@@ -62,24 +62,23 @@ const CustomerEdit = () => {
     // @ handle form submit
     const onSubmit = async (data: CustomerData) => {
         // console.log(data);
-        let a=await updateCustomer(data);
-        console.log(a);
+        let a = await updateCustomer(data);
         navigate('/');
 
     }
 
 
 
-  return (
-    <React.Fragment>
-         <Container
+    return (
+        <React.Fragment>
+            <Container
                 sx={{ mt: 5, mb: 3, backgroundColor: "white" }}
                 maxWidth="md"
             >
                 {/* <ProgressBarCircle show={showToastr}/>
                 <SuccessToastr message='New Customer Added Successfully' show={showToastr} /> */}
 
-               
+
 
                 <Grid container spacing={5}>
                     <Grid item md={12} xs={12} sm={12} >
@@ -95,15 +94,15 @@ const CustomerEdit = () => {
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2} sx={{ mt: 3 }}>
                         <Grid item lg={12} md={4} sm={6} xs={12}   >
-                            <TextField {...register('customer_name')} fullWidth id="customer" label="Customer Name" variant="standard"  defaultValue={' '} />
+                            <TextField {...register('customer_name')} fullWidth id="customer" label="Customer Name" variant="standard" defaultValue={' '} />
                         </Grid>
 
                         <Grid item lg={12} md={4} sm={6} xs={12}   >
-                            <TextField {...register('customer_address')} fullWidth id="address" label="Customer Address" variant="standard"  defaultValue={' '} />
+                            <TextField {...register('customer_address')} fullWidth id="address" label="Customer Address" variant="standard" defaultValue={' '} />
                         </Grid>
 
                         <Grid item lg={12} md={4} sm={6} xs={12}   >
-                            <TextField {...register('customer_contact')} fullWidth id="contact" label="Contact No" variant="standard"   defaultValue={' '}/>
+                            <TextField {...register('customer_contact')} fullWidth id="contact" label="Contact No" variant="standard" defaultValue={' '} />
                         </Grid>
 
 
@@ -118,8 +117,8 @@ const CustomerEdit = () => {
 
             </Container>
 
-    </React.Fragment>
-  )
+        </React.Fragment>
+    )
 }
 
 export default CustomerEdit
