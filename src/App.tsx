@@ -13,6 +13,8 @@ import ProductView from './pages/ProductView';
 import ProductEdit from './pages/ProductEdit';
 import MasterRoute from './app/routes/MasterRoute';
 import Home from './pages/Home';
+import CompA from './components/TestComponent/CompA';
+import CompB from './components/TestComponent/CompB';
 
 
 
@@ -21,6 +23,8 @@ function App() {
     <div>
      
       <MasterRoute/>
+      {/* <CompA/> */}
+      <CompB/>
       
       {/* <Router>
 

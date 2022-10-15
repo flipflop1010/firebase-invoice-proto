@@ -20,6 +20,7 @@ const InvoiceTableRow = (props: any) => {
     const {rowId,handleRemoveRow}=props;
 
     const [items,setItems]=React.useState<any>([])
+    const [isDestroyComponent,setDestroyComponent]=React.useState<Boolean>(false);
 
     const defaultProps = {
         options: items,
@@ -28,13 +29,9 @@ const InvoiceTableRow = (props: any) => {
 
   
 
-    const [des,setDes]=React.useState<boolean>(true)
+    
 
-    React.useEffect(()=>{
-        if(des){
-            return ()=>{}
-        }
-    },[des])
+    
 
     const selectedItem=(value:any)=>{
         console.log(value);
@@ -51,9 +48,19 @@ const InvoiceTableRow = (props: any) => {
     
 
     const handleClose=(e:any)=>{
-        handleRemoveRow(rowId)
-        // setDes(false);
+        console.log('handleClose', rowId);
+        handleRemoveRow(rowId);
+        // setDestroyComponent(true);
     }
+    // React.useEffect(()=>{
+    //     if(isDestroyComponent){
+    //         // handleRemoveRow(rowId)
+    //         // return ()=>{
+    //         //     console.log(`compoenent destroy ${rowId}`);
+                
+    //         // }
+    //     }
+    // },[isDestroyComponent])
 
 
     const handleItemSearch=async(e:any)=>{
@@ -76,7 +83,7 @@ const InvoiceTableRow = (props: any) => {
 
     return (
         <>
-        {des && (
+        {!isDestroyComponent && (
             <TableRow
                 key={rowId}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}

@@ -20,8 +20,23 @@ const InvoiceTable = (props: any) => {
     
     
     const handleRemoveRow=(rowId:any)=>{
-            // let r=[...rows];
-            console.log(rows);
+        console.log('rowId',rowId);
+        console.log('rows',rows);
+        
+        let r=[...rows];
+        console.log('r',r);
+            // var a=r.splice(rowId,1);
+            // console.log('deleted',a);
+
+            // r=r.filter((item)=>{
+            //     return item.index!=rowId
+            // })
+            // console.log('r',r);
+            
+            // setRows(r);
+            // console.log(rows);
+            // console.log('rowId',rowId);
+            
 
             // r=rows.filter((row)=>{
             //     return row.index==rowId;
@@ -35,6 +50,9 @@ const InvoiceTable = (props: any) => {
     const handleAddRow=(e:any)=>{
         let current_rows=rows.length;
         setRows([...rows,{index:current_rows+1,component:<InvoiceTableRow handleRemoveRow={handleRemoveRow} key={current_rows+1} rowId={current_rows+1} />}])
+
+        console.log('add-row rows',rows);
+        
     }
 
     
@@ -60,7 +78,7 @@ const InvoiceTable = (props: any) => {
                             </TableHead>
                             <TableBody>
 
-                                {rows && rows.map(row=>row.component)}
+                                {rows  && rows.map(row=>row.component)}
 
                             </TableBody>
                         </Table>

@@ -96,7 +96,7 @@ const Invoice = () => {
 
     // @flip@ init useEffect
     React.useEffect(() => {
-        console.log('moment',moment().format("DD/MM/YYYY"));
+        // console.log('moment',moment().format("DD/MM/YYYY"));
         // console.log('customers', customers);
         // initAsyncCall()
 
@@ -230,7 +230,7 @@ const Invoice = () => {
 
                     <Grid item lg={12} md={12} xs={12} sm={12} sx={{ display: "flex", justifyContent: "right" }} >
 
-                        <Button variant="outlined" sx={{ boxShadow: "none", borderRadius: "0px" }}>Add Item</Button>
+                        {/* <Button variant="outlined" sx={{ boxShadow: "none", borderRadius: "0px" }}>Add Item</Button> */}
                     </Grid>
                     <Grid item md={5.5} sm={6} xs={12}>
 
