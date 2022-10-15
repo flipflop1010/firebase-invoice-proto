@@ -21,17 +21,19 @@ const Product = () => {
         console.log(res);
         if (res.success)
             setShowProgressBar(false);
-        setProducts(res.data)
+            setProducts(res.data);
     }
 
 
     React.useEffect(() => {
         getProducts()
+
+
     }, [])
 
 
 
-    // @ delete customer handle
+    // @ delete product handle
     const handleProductDelete = async (id: any) => {
         console.log('delete id', id);
         if (!window.confirm('are u sure?')) {

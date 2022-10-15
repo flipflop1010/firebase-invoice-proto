@@ -11,13 +11,18 @@ import CustomerView from './pages/CustomerView';
 import CustomerEdit from './pages/CustomerEdit';
 import ProductView from './pages/ProductView';
 import ProductEdit from './pages/ProductEdit';
+import MasterRoute from './app/routes/MasterRoute';
+import Home from './pages/Home';
 
 
 
 function App() {
   return (
     <div>
-      <Router>
+     
+      <MasterRoute/>
+      
+      {/* <Router>
 
         <Routes>
           <Route path="/" element={<Customer />} />
@@ -32,7 +37,9 @@ function App() {
           <Route path="/invoice" element={<Invoice />} />
         </Routes>
 
-      </Router>
+      </Router> */}
+
+
 
     </div>
   );

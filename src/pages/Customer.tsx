@@ -76,7 +76,7 @@ const Customer = () => {
                 <Grid container spacing={2} sx={{ mt: 3 }}>
                     <Grid item lg={12} md={12} xs={12} sm={12} sx={{ display: "flex", justifyContent: "right", mt: 1 }} >
 
-                        <Button variant="outlined" component={NavLink} to={`customer-add`} sx={{ boxShadow: "none", borderRadius: "0px" }}>Add Customer</Button>
+                        <Button variant="outlined" component={NavLink} to={`/customer/customer-add`} sx={{ boxShadow: "none", borderRadius: "0px" }}>Add Customer</Button>
                     </Grid>
                     <Grid item lg={12} md={12} sm={12} xs={12}   >
                         <TableContainer >

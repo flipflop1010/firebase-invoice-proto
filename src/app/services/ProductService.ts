@@ -1,5 +1,5 @@
 
-import { addDoc, DocumentReference, getDoc, getDocs, doc, updateDoc, setDoc, deleteDoc } from 'firebase/firestore';
+import { addDoc, DocumentReference, getDoc, getDocs, doc, updateDoc, setDoc, deleteDoc, query, where } from 'firebase/firestore';
 import { itemRef, firebaseDB } from '../config/firebaseConfig/firebaseConfig';
 import ProductModel from '../data-models/ProductModel';
 import { collection } from 'firebase/firestore';
@@ -7,14 +7,14 @@ import { collection } from 'firebase/firestore';
 
 class ProductService {
     private  collection_name='items';
-    private itemsRef=collection(firebaseDB,this.collection_name);
+    private docRef=collection(firebaseDB,this.collection_name);
     
 
 
 
     fetchAll = async () => {
         try {
-            const docSnap = await getDocs(this.itemsRef)
+            const docSnap = await getDocs(this.docRef)
 
             let temp_arr: any[] = [];
             docSnap.forEach((doc) => {
@@ -48,6 +48,37 @@ class ProductService {
         // return docSnap.data()
         let data: any = docSnap.data();
         data['id'] = docSnap.id;
+
+        return {
+            success:true,
+            data:data
+        };
+       } catch (error) {
+        return {
+            success:false,
+            message:`problem occured: ${error}`
+        }
+       }
+    }   
+    fetchByName=async(keyword:string)=>{
+       try {
+        const q=query(this.docRef,where('product_name','>=',keyword),where('product_name','<=',keyword+'\uf8ff'))
+        const docSnap=await getDocs(q);
+        // console.log(docSnap);
+        let data:any=[];
+        docSnap.forEach(doc=>{
+            let temp=doc.data();
+            temp['id']=doc.id;
+            data.push(temp);
+        })
+
+        // console.log(data);
+        
+        
+
+        // return docSnap.data()
+        // let data: any = docSnap.data();
+        // data['id'] = docSnap.id;
 
         return {
             success:true,

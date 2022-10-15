@@ -6,6 +6,7 @@
 //  This  is used in Invoice Page 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 import React, { useState, useEffect } from "react";
+
 import {
     Grid,
     Box,
@@ -13,16 +14,19 @@ import {
     Typography,
     Container,
     CardContent,
-
     Card,
     Autocomplete,
-    TextField
+    TextField,
+    Stack
 } from "@mui/material"; //import the mui component 
 
 import { makeStyles } from '@mui/styles'; //import the makestyles 
 import InvoiceTable from "../components/InvoiceTable";
+import CustomerModel from '../app/data-models/CustomerModel';
+import customerService from '../app/services/CustomerService';
+import ProgressBarCircle from '../components/shared/porgress-bar/ProgressBarCircle';
+import moment from "moment";
 // ==========================================================
-
 
 // useStyles use here
 const useStyles = makeStyles(() => ({
@@ -35,18 +39,29 @@ const useStyles = makeStyles(() => ({
         backgroundColor: "black !important",
         color: "white !important",
         borderRadius: "0px !important",
-        fontSize: "11 !important",
-    },
+        fontSize: "11 !important"
+    }
+
+
+
 }));
 
-const customers = [
-    { customer: 'customer1' },
-    { customer: 'customer2' },
-    { customer: 'customer3' },
-    { customer: 'customer4' },
-    { customer: 'customer5' },
-];
 
+
+
+
+// const customers = [
+//     { customer: 'customer1' },
+//     { customer: 'customer2' },
+//     { customer: 'customer3' },
+//     { customer: 'customer4' },
+//     { customer: 'customer5' },
+// ];
+
+
+
+
+// @flip@ main component
 const Invoice = () => {
 
 
@@ -54,10 +69,61 @@ const Invoice = () => {
     const [itemsall, setItems]: any = useState();
     const [quantity, setQuantity]: any = useState(Number);
     const [itemTotal, setItemTotal]: any = useState(Number)
+    // @flip@ circle preloader
+    const [showProgressBar, setShowProgressBar] = React.useState<boolean>(false)
+
+    // @flip@ customer state
+    const [customers, setCustomers] = React.useState<CustomerModel[]>();
+
+
+
+    const initAsyncCall = async () => {
+
+        try {
+            setShowProgressBar(true);
+            let customers = await customerService.fetchAll();
+            console.log(customers);
+            setCustomers(customers.data);
+            setShowProgressBar(false)
+        } catch (error) {
+
+        }
+
+
+
+    }
+
+
+    // @flip@ init useEffect
+    React.useEffect(() => {
+        console.log('moment',moment().format("DD/MM/YYYY"));
+        // console.log('customers', customers);
+        // initAsyncCall()
+
+        
+    }, [])
+
+
 
 
     const selectedItem = (value: any) => {
+        console.log('selected Item value',value);
+        
         setItems(value);
+    }
+
+    // @flip@ handle Customer Search
+    const handleCustomerSearch=async (event:any)=>{
+       let keyword=event.target.value;
+
+       if(keyword && keyword.length>=2){
+        let res=await customerService.fetchByName(keyword);
+
+        if(res.success){
+            setCustomers(res.data)
+        }
+       }
+        
     }
 
 
@@ -72,8 +138,8 @@ const Invoice = () => {
     }, [itemsall, quantity])
 
     const defaultProps = {
-        options: customers,
-        getOptionLabel: (option: any) => option.customer,
+        options: customers?.length?customers:[],
+        getOptionLabel: (option: CustomerModel) => option.customer_name,
     };
 
 
@@ -81,7 +147,7 @@ const Invoice = () => {
     return (
         // Container Start here
         <>
-
+            {showProgressBar && (<ProgressBarCircle show={showProgressBar} /> )}
             <Container
                 sx={{ mt: 5, mb: 3, backgroundColor: "white" }}
                 maxWidth="md"
@@ -97,68 +163,38 @@ const Invoice = () => {
                     </Grid>
                 </Grid>
 
-                {/* <Grid container spacing={3} sx={{ mt: 1 }}> */}
-                {/* <Grid item md={5.5} sm={6} xs={12}>
-
-                        <Card sx={{ boxShadow: "none", border: "1px solid #efefef" }}>
-                            <CardContent>
-                                <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color="text.primary" gutterBottom>
-                                    Amazing Company
-                                </Typography>
-                                <Typography variant="body2" component="div">
-                                    123 Kingstone Ave
-                                </Typography>
-                                <Typography variant="body2" color="text.primary">
-                                    Toronto, On Canada A1BG5FG
-                                </Typography>
-                                <Typography variant="body2">
-                                    416-555-254
-
-                                </Typography>
-                            </CardContent>
-                        </Card>
-
-
-                    </Grid> */}
-
-                {/* <Grid item md={1} sm={0} xs={12}>
-                    </Grid> */}
-                {/* personal Information portion start */}
-                {/* <Grid item md={5.5} sm={6} xs={12}>
-                        <Card sx={{ boxShadow: "none", border: "1px solid #efefef" }}>
-                            <CardContent>
-                                <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color="text.primary" gutterBottom>
-                                    Customer#  <span style={{ paddingLeft: "25px" }}>123456</span>
-                                </Typography>
-
-                                <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color="text.primary" gutterBottom>
-                                    Invoice#  <span style={{ paddingLeft: "25px" }}>123456</span>
-                                </Typography>
-
-                                <Typography sx={{ fontSize: 14, fontWeight: "bold" }} color="text.primary" gutterBottom>
-                                    Date#    <span style={{ paddingLeft: "25px" }}>2022-07-11</span>
-                                </Typography>
-
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                </Grid> */}
 
                 <Grid container spacing={2} sx={{
                     mt: 2, p
                         : 2
                 }}>
                     <Grid item lg={4} md={3} xs={12} sm={12}  >
-                        <Autocomplete
+                       
+                        {/* <Autocomplete
+                        
                             fullWidth
-                            {...defaultProps}
+                           {...defaultProps}
                             id="clear-on-escape"
                             clearOnEscape
                             onChange={(event, value) => selectedItem(value)}
                             renderInput={(params) => (
                                 <TextField {...params} label="Select Customer" variant="standard" />
                             )}
-                        />
+                        /> */}
+
+                        <Autocomplete
+                              {...defaultProps}
+                                id="auto-complete"
+                                autoComplete
+                                includeInputInList
+                                onChange={(event,value)=>selectedItem(value)}
+                                onKeyUp={(event)=>{handleCustomerSearch(event)}
+                                }
+                                renderInput={(params) => (
+                                <TextField {...params} label="Customer Name" variant="standard" />
+                                )}
+                            />
+
 
                     </Grid>
 
@@ -174,7 +210,7 @@ const Invoice = () => {
                             id="date"
                             label="Invoice Date"
                             type="date"
-                            defaultValue="2017-05-24"
+                            defaultValue={moment().format("YYYY-MM-DD")}
                             variant="standard"
                             InputLabelProps={{
                                 shrink: true,

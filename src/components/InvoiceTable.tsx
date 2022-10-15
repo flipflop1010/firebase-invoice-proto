@@ -1,33 +1,43 @@
 
 import React from 'react'
-import { Autocomplete, Grid, TextField, } from '@mui/material'
+import { Autocomplete, Button, Grid, TextField, } from '@mui/material'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import InvoiceTableRow from './InvoiceTableRow';
 
 
-const items = [
-    { item: 'item1', price: 50 },
-    { item: 'item2', price: 72 },
-    { item: 'item3', price: 74 },
-    { item: 'item4', price: 28 },
-    { item: 'item5', price: 57 },
 
-];
 
 const InvoiceTable = (props: any) => {
 
     const { handelChangeItemQty, selectedItem, itemsall, itemTotal } = props;
 
+    const [rows,setRows]=React.useState<any[]>([])
+    
+    
+    const handleRemoveRow=(rowId:any)=>{
+            // let r=[...rows];
+            console.log(rows);
 
-    const defaultProps = {
-        options: items,
-        getOptionLabel: (option: any) => option.item,
-    };
+            // r=rows.filter((row)=>{
+            //     return row.index==rowId;
+            // })
 
+            
+
+            // setRows(r);
+
+    }
+    const handleAddRow=(e:any)=>{
+        let current_rows=rows.length;
+        setRows([...rows,{index:current_rows+1,component:<InvoiceTableRow handleRemoveRow={handleRemoveRow} key={current_rows+1} rowId={current_rows+1} />}])
+    }
+
+    
 
 
     return (
@@ -45,52 +55,12 @@ const InvoiceTable = (props: any) => {
                                     <TableCell >Qty</TableCell>
                                     <TableCell >Price</TableCell>
                                     <TableCell >Total</TableCell>
+                                    <TableCell >Action</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
 
-                                {
-
-                                    items.map((item: any, i: number) => {
-
-                                        return (
-
-                                            <TableRow
-                                                key={i}
-                                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                            >
-                                                <TableCell component="th" scope="row">
-                                                    {i + 1}
-                                                </TableCell>
-                                                <TableCell component="th" scope="row" sx={{ width: "350px" }}>
-                                                    <Autocomplete
-                                                        fullWidth
-                                                        {...defaultProps}
-                                                        id="clear-on-escape"
-                                                        clearOnEscape
-                                                        onChange={(event, value) => selectedItem(value)}
-                                                        renderInput={(params) => (
-                                                            <TextField {...params} label="Select Item" variant="standard" />
-                                                        )}
-                                                    />
-                                                </TableCell>
-
-                                                <TableCell sx={{ width: "150px" }}>
-                                                    <TextField id="standard-basic" sx={{ mt: 1.8 }} onChange={(e) => handelChangeItemQty(e)} variant="standard" />
-                                                </TableCell>
-                                                <TableCell sx={{ width: "150px" }}>
-
-                                                    <TextField id="standard-basic" disabled sx={{ mt: 1.8 }} value={itemsall?.price} variant="standard" />
-                                                </TableCell>
-                                                <TableCell>{itemTotal ? itemTotal : 0}</TableCell>
-
-
-                                            </TableRow>
-                                        )
-
-                                    })
-                                }
-
+                                {rows && rows.map(row=>row.component)}
 
                             </TableBody>
                         </Table>
@@ -98,6 +68,7 @@ const InvoiceTable = (props: any) => {
 
 
                 </Grid>
+                    <Button onClick={(e)=>{handleAddRow(e)}} variant="outlined" sx={{ boxShadow: "none", borderRadius: "0px" }}>Add Item</Button>
 
             </Grid>
         </div>
