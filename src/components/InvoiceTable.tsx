@@ -23,8 +23,8 @@ const InvoiceTable = (props: any) => {
         console.log('rowId',rowId);
         console.log('rows',rows);
         
-        let r=[...rows];
-        console.log('r',r);
+        // let r=[...rows];
+        // console.log('r',r);
             // var a=r.splice(rowId,1);
             // console.log('deleted',a);
 
